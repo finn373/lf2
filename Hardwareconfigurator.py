@@ -1,7 +1,8 @@
 import pymysql.cursors
 import os
-import sys
 from colorama import init, Fore
+import uuid
+import sys
 
 class hardware_configurator:
 	
@@ -222,6 +223,7 @@ class hardware_configurator:
 					print('Can´t connect to the Database')
 	
 	class console_stuff:
+		Summe = 0
 
 		def instruction_console_print():
 			init()
@@ -241,6 +243,7 @@ class hardware_configurator:
 			hardware_configurator.console_stuff.results()
 
 		def results():
+				
 				hardware_configurator.utils.clear_console_window()
 				
 				print(Fore.CYAN + 'Summary:')
@@ -249,8 +252,40 @@ class hardware_configurator:
 				print(Fore.YELLOW + 'Ram: ', Fore.GREEN + hardware_configurator.ram_data.ram_model, 'Price: %s' % (hardware_configurator.ram_data.ram_price,) + '€')
 				print(Fore.YELLOW + 'Gpu: ', Fore.GREEN + hardware_configurator.gpu_data.gpu_model, 'Price: %s' % (hardware_configurator.gpu_data.gpu_price,) + '€')
 				
-				Summe = hardware_configurator.motherboard_data.motherboard_price + hardware_configurator.cpu_data.cpu_price + hardware_configurator.ram_data.ram_price + hardware_configurator.gpu_data.gpu_price
-				Summe = round(Summe, 2)
-				print(Fore.GREEN + 'Summe: %s' % (Summe,) + '€')
+				hardware_configurator.console_stuff.Summe = hardware_configurator.motherboard_data.motherboard_price + hardware_configurator.cpu_data.cpu_price + hardware_configurator.ram_data.ram_price + hardware_configurator.gpu_data.gpu_price
+				hardware_configurator.console_stuff.Summe = round(hardware_configurator.console_stuff.Summe, 2)
+				print(Fore.GREEN + 'Summe: %s' % (hardware_configurator.console_stuff.Summe,) + '€')
+				
+				
+				order_questions = str(input('If you want to order the components enter "y" else "n": '))
+
+				if order_questions == "y":
+					hardware_configurator.utils.clear_console_window()
+					print(Fore.GREEN + 'Order is set you gonna get an E-mail later, with the next instructions')
+					hardware_configurator.write_data_to_database.write_order_in_db(hardware_configurator.motherboard_data.motherboard_model, hardware_configurator.cpu_data.cpu_model, hardware_configurator.ram_data.ram_model, hardware_configurator.gpu_data.gpu_model, hardware_configurator.console_stuff.Summe)
+				
+				elif order_questions == "n":
+					print(Fore.GREEN + 'The Process has been canceled')
+					sys.exit(0)
+	
+	class write_data_to_database:
+
+		def write_order_in_db(Motherboard, Cpu, Ram, Gpu, Price):
+			try:
+				
+				id = uuid.uuid1()
+				connection = hardware_configurator.utils.create_connection_to_database('127.0.0.1', 'root', '', 'hardware_db', 3360, 'utf8mb4')
+		
+				with connection.cursor() as cursor:
+						
+						
+						command = "INSERT INTO orders_tbl (order_ID, Motherboard, Cpu, Ram, Gpu, Price) VALUES (%s, %s, %s, %s, %s, %s)"
+						val = id, hardware_configurator.motherboard_data.motherboard_model, hardware_configurator.cpu_data.cpu_model, hardware_configurator.ram_data.ram_model, hardware_configurator.gpu_data.gpu_model, "%s" % hardware_configurator.console_stuff.Summe + "€"
+						cursor.execute(command, val)
+						connection.commit()
+						connection.close()
+
+			except pymysql.err.OperationalError:
+					print('Can´t connect to the Database')
 
 hardware_configurator.console_stuff.instruction_console_print()

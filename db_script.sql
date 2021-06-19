@@ -69,6 +69,23 @@ INSERT INTO `motherboard_tbl` (`motherboard_ID`, `Motherboard_Name`, `Motherboar
 	(2, 'MSI B550-A Pro AMD B550', '108,00€');
 /*!40000 ALTER TABLE `motherboard_tbl` ENABLE KEYS */;
 
+-- Exportiere Struktur von Tabelle hardware_db.orders_tbl
+CREATE TABLE IF NOT EXISTS `orders_tbl` (
+  `order_ID` varchar(50) NOT NULL DEFAULT '',
+  `Motherboard` varchar(100) NOT NULL DEFAULT '',
+  `Cpu` varchar(100) DEFAULT NULL,
+  `Ram` varchar(100) DEFAULT NULL,
+  `Gpu` varchar(100) DEFAULT NULL,
+  `Price` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`order_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Exportiere Daten aus Tabelle hardware_db.orders_tbl: ~0 rows (ungefähr)
+/*!40000 ALTER TABLE `orders_tbl` DISABLE KEYS */;
+INSERT INTO `orders_tbl` (`order_ID`, `Motherboard`, `Cpu`, `Ram`, `Gpu`, `Price`) VALUES
+	('6c3e0fb8-d100-11eb-91ba-b42e9931a269', 'MSI Z390-A PRO Intel Z390', 'i7 8700K', 'G.Skill Rip Jaws V', 'ASUS Phoenix GeForce GTX 1050 Ti', '800.38€');
+/*!40000 ALTER TABLE `orders_tbl` ENABLE KEYS */;
+
 -- Exportiere Struktur von Tabelle hardware_db.ram_tbl
 CREATE TABLE IF NOT EXISTS `ram_tbl` (
   `ram_ID` int(100) NOT NULL,
