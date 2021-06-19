@@ -29,11 +29,21 @@ class hardware_configurator:
 		
 		def motherboard_choice_handler():
 
-			motherboard_choice = int(input(Fore.MAGENTA + 'Please enter the number of the component you want to get: '))
-			if motherboard_choice == 1:
-				return 'MSI Z390-A PRO Intel Z390', 104.0	
-			elif motherboard_choice == 2:
-				return 'MSI B550-A Pro AMD B550', 108.0
+			while True:
+				try:
+					motherboard_choice = int(input(Fore.MAGENTA + 'Please enter the number of the component you want to get: '))
+			
+					if motherboard_choice == 1:
+						return 'MSI Z390-A PRO Intel Z390', 104.0	
+						break
+					elif motherboard_choice == 2:
+						return 'MSI B550-A Pro AMD B550', 108.0
+						break
+					else:
+						print(Fore.RED + "Invalid Input")
+				except ValueError:
+					print(Fore.RED + "Invalid Input")
+					continue
 
 		def get_motherboard_data():
 
@@ -68,21 +78,38 @@ class hardware_configurator:
 			
 			if hardware_configurator.motherboard_data.motherboard_model == 'MSI Z390-A PRO Intel Z390':
 				
-				cpu_choice = int(input(Fore.MAGENTA + 'Please enter the number of the component you want to get: '))
+				while True:
+					try:
+						cpu_choice = int(input(Fore.MAGENTA + 'Please enter the number of the component you want to get: '))
 
-				if cpu_choice == 1:
-					return 'i7 9700K', 277.00
-				elif cpu_choice == 2:
-					return 'i7 8700K', 337.99
+						if cpu_choice == 1:
+							return 'i7 9700K', 277.00
+							break
+						elif cpu_choice == 2:
+							return 'i7 8700K', 337.99
+							break
+						else:
+							print(Fore.RED + "Invalid Input")
+					except ValueError:
+						print('Invalid Input')
+						continue
 
 			elif hardware_configurator.motherboard_data.motherboard_model == 'MSI B550-A Pro AMD B550':
 				
-				cpu_choice = int(input(Fore.MAGENTA + 'Please enter the number of the component you want to get: '))
+				while True:
+					try:
 
-				if cpu_choice == 3:
-					return 'Ryzen 5 1600', 129.00
-				elif cpu_choice == 4:
-					return 'Ryzen 5 3600', 199.00
+						cpu_choice = int(input(Fore.MAGENTA + 'Please enter the number of the component you want to get: '))
+
+						if cpu_choice == 3:
+							return 'Ryzen 5 1600', 129.00
+							break
+						elif cpu_choice == 4:
+							return 'Ryzen 5 3600', 199.00
+							break
+					except ValueError:
+						print(Fore.RED + 'Invalid Input')
+						continue
 
 		def get_cpu_data():
 			
@@ -142,16 +169,26 @@ class hardware_configurator:
 		ram_price = 0.0
 
 		def ram_choice_handler():
-			
-			ram_choice = int(input(Fore.MAGENTA + 'Please enter the number of the component you want to get: '))
+			while True:
+				try:
 
-			if ram_choice == 1:
-					return 'Patriot Viper 4', 45.49
-			elif ram_choice == 2:
-					return 'Crucial Ballistix', 81.80
-			elif ram_choice == 3:
-					return 'G.Skill Rip Jaws V', 159.40
-		
+					ram_choice = int(input(Fore.MAGENTA + 'Please enter the number of the component you want to get: '))
+
+					if ram_choice == 1:
+						return 'Patriot Viper 4', 45.49
+						break
+					elif ram_choice == 2:
+						return 'Crucial Ballistix', 81.80
+						break
+					elif ram_choice == 3:
+						return 'G.Skill Rip Jaws V', 159.40
+						break
+					else:
+						print(Fore.RED + "Invalid Input")
+				except ValueError:
+					print(Fore.RED + 'Invalid Input')
+					continue
+
 		def get_ram_data():
 		
 			try:
@@ -184,17 +221,27 @@ class hardware_configurator:
 		gpu_price = 0.0
 
 		def gpu_choice_handler():
-			
-			gpu_choice = int(input(Fore.MAGENTA + 'Please enter the number of the component you want to get: '))
+			while True:
+				try:
+					gpu_choice = int(input(Fore.MAGENTA + 'Please enter the number of the component you want to get: '))
 
-			if gpu_choice == 1:
-					return 'Nvidia GeForce RTX 3090 Founders Edition', 2499.99
-			elif gpu_choice == 2:
-					return 'MSI GeForce RTX 3060 Gaming X', 899.00
-			elif gpu_choice == 3:
-					return 'MSI GeForce GTX 1650 D6 Ventus XS OCV2', 289.00
-			elif gpu_choice == 4:
-					return 'ASUS Phoenix GeForce GTX 1050 Ti', 198.99
+					if gpu_choice == 1:
+						return 'Nvidia GeForce RTX 3090 Founders Edition', 2499.99
+						break
+					elif gpu_choice == 2:
+						return 'MSI GeForce RTX 3060 Gaming X', 899.00
+						break
+					elif gpu_choice == 3:
+						return 'MSI GeForce GTX 1650 D6 Ventus XS OCV2', 289.00
+						break
+					elif gpu_choice == 4:
+						return 'ASUS Phoenix GeForce GTX 1050 Ti', 198.99
+						break
+					else:
+						print(Fore.RED + "Invalid Input")
+				except ValueError:
+					print(Fore.RED + 'Invalid Input')
+					continue
 		
 		def get_gpu_data():
 			try:
@@ -277,7 +324,6 @@ class hardware_configurator:
 				connection = hardware_configurator.utils.create_connection_to_database('127.0.0.1', 'root', '', 'hardware_db', 3360, 'utf8mb4')
 		
 				with connection.cursor() as cursor:
-						
 						
 						command = "INSERT INTO orders_tbl (order_ID, Motherboard, Cpu, Ram, Gpu, Price) VALUES (%s, %s, %s, %s, %s, %s)"
 						val = id, hardware_configurator.motherboard_data.motherboard_model, hardware_configurator.cpu_data.cpu_model, hardware_configurator.ram_data.ram_model, hardware_configurator.gpu_data.gpu_model, "%s" % hardware_configurator.console_stuff.Summe + "€"
